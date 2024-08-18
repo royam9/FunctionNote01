@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace Service;
+namespace Services;
 
 public class ConvertWordToHtmlService
 {

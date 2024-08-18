@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Service;
+using Services;
 using System.Text;
 
 namespace Api.Controllers;
@@ -46,13 +46,13 @@ public class ConvertHtmlToPdfController : Controller
     [Route("ConvertBig5HtmlToPdf")]
     public IActionResult ConvertBig5HtmlToPdf(string htmlContent)
     {
-        // 先假設有 htmlstring
-
         // 要正確讀取要這段程式碼 可能要安裝 System.Text.Encoding.CodePages
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         
         // 然後這樣
-        htmlContent = System.IO.File.ReadAllText(@"C:\Users\TWJOIN\Desktop\Komo\個資使用同意書_中英文_20240722_草案.html", Encoding.GetEncoding("big5"));
+        htmlContent = System.IO.File
+            .ReadAllText(@"D:\hi\CodePractice\FunctionNote01\Api\Resource\Template\個資使用同意書_中英文_20240722_草案.html", 
+            Encoding.GetEncoding("big5"));
 
         byte[] pdfbytes = ConvertHtmlToPdfService.ConvertBig5HtmlToPdf(htmlContent);
 

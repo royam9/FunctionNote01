@@ -5,7 +5,7 @@ using System.Collections;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
 
-namespace Service;
+namespace Services;
 
 public class ConvertHtmlToPdfService
 {
@@ -16,7 +16,7 @@ public class ConvertHtmlToPdfService
     /// <return></return>
     public static byte[] ConvertUTF8HtmlToPdf(string htmlContent)
     {
-        string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\App\wkhtmltox\bin\wkhtmltopdf.exe"));
+        string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe"));
 
         // 確認 wkhtmltopdf.exe 是否存在
         if (!File.Exists(wkhtmltopdfPath))
@@ -74,7 +74,7 @@ public class ConvertHtmlToPdfService
     /// <return></return>
     public static byte[] ConvertBig5HtmlToPdf(string htmlContent)
     {
-        string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\App\wkhtmltox\bin\wkhtmltopdf.exe"));
+        string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe"));
 
         // 確認 wkhtmltopdf.exe 是否存在
         if (!File.Exists(wkhtmltopdfPath))
@@ -83,7 +83,8 @@ public class ConvertHtmlToPdfService
         }
 
         // 設置命令行參數，將 PDF 輸出到標準輸出流（stdout）
-        string arguments = $"--page-size A4 --margin-top 20mm --margin-right 20mm --margin-bottom 20mm --margin-left 20mm --zoom 1.3 - -";
+        // 把 --zoom 改成 --disable-smart-shrinking 禁止智能縮放
+        string arguments = $"--page-size A4 --margin-top 20mm --margin-right 20mm --margin-bottom 20mm --margin-left 20mm --disable-smart-shrinking - -";
 
         // 創建進程啟動信息
         ProcessStartInfo processStartInfo = new ProcessStartInfo
@@ -124,6 +125,13 @@ public class ConvertHtmlToPdfService
 
         return pdfBytes; // 返回生成的 PDF 數據
     }
+
+    /// <summary>
+    /// 非同步 Html 轉換成 Pdf
+    /// </summary>
+    /// <param name="htmlContent">Html文字(UTF-8)</param>
+    /// <return></return>
+
 
     /// <summary>
     /// 替換Word另存新檔成html 裡面的參數
