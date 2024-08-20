@@ -10,12 +10,23 @@ namespace Services;
 public class ConvertHtmlToPdfService
 {
     /// <summary>
+    /// 是否為 Linux環境
+    /// </summary>
+    private bool _isLinux;
+
+    public ConvertHtmlToPdfService()
+    {
+        _isLinux = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
+    }
+
+    /// <summary>
     /// Html 轉換成 Pdf
     /// </summary>
     /// <param name="htmlContent">Html文字(UTF-8)</param>
     /// <return></return>
     public static byte[] ConvertUTF8HtmlToPdf(string htmlContent)
     {
+        
         string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe"));
 
         // 確認 wkhtmltopdf.exe 是否存在
@@ -131,6 +142,68 @@ public class ConvertHtmlToPdfService
     /// </summary>
     /// <param name="htmlContent">Html文字(UTF-8)</param>
     /// <return></return>
+    public static async Task<byte[]> HtmlToPdf(string htmlContent)
+    {
+        // ..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe
+        // 正式專案 ..\..\..\Resources\PdfPackage\wkhtmltox\bin\wkhtmltopdf.exe
+        string wkhtmltopdfPath;
+        if (_isLinux)
+        {
+            wkhtmltopdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Rotativa/Linux/wkhtmltopdf");
+        }
+        else
+        {
+            wkhtmltopdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/PdfPackage/wkhtmltox/bin/wkhtmltopdf.exe");
+        }
+
+        // 確認 wkhtmltopdf.exe 是否存在
+        if (!File.Exists(wkhtmltopdfPath))
+        {
+            throw new FileNotFoundException("The wkhtmltopdf executable was not found at the specified path.", wkhtmltopdfPath);
+        }
+
+        // 設置命令行參數，將 PDF 輸出到標準輸出流（stdout）
+        string arguments = $"--page-size A4 --margin-top 20mm --margin-right 20mm --margin-bottom 20mm --margin-left 20mm --zoom 1.3 - -";
+
+        // 創建進程啟動信息
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
+        {
+            FileName = wkhtmltopdfPath,
+            Arguments = arguments,
+            RedirectStandardInput = true,  // 重定向標準輸入
+            RedirectStandardError = true,  // 重定向標準錯誤
+            RedirectStandardOutput = true, // 重定向標準輸出
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        byte[] pdfBytes;
+
+        using (Process process = Process.Start(processStartInfo))
+        {
+            // 確保使用 UTF-8 編碼寫入 HTML
+            using (StreamWriter standardInput = new StreamWriter(process.StandardInput.BaseStream, Encoding.UTF8))
+            {
+                await standardInput.WriteAsync(htmlContent);
+            }
+
+            // 使用 MemoryStream 來保存 PDF 數據
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await process.StandardOutput.BaseStream.CopyToAsync(memoryStream);
+                pdfBytes = memoryStream.ToArray();
+            }
+
+            await process.WaitForExitAsync();
+            if (process.ExitCode != 0)
+            {
+                string error = await process.StandardError.ReadToEndAsync();
+                throw new Exception($"wkhtmltopdf failed: {error}");
+            }
+        }
+
+        return pdfBytes; // 返回生成的 PDF 數據
+    }
 
 
     /// <summary>

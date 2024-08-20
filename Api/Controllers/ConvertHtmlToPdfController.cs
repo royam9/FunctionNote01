@@ -58,4 +58,21 @@ public class ConvertHtmlToPdfController : Controller
 
         return File(pdfbytes, "application/pdf", "使用wkhtmltopdf轉換成pdf");
     }
+
+    /// <summary>
+    /// Html 轉換成 Pdf 非同步
+    /// </summary>
+    /// <param name="htmlContent">html文字(UTF8編碼)</param>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("ConvertHtmlToPdfAsync")]
+    public async Task<IActionResult> ConvertHtmlToPdfAsync(string htmlContent)
+    {
+        // 先假設有 htmlstring
+        htmlContent = System.IO.File.ReadAllText(@"C:\Users\TWJOIN\Desktop\Komo\個資使用同意書_中英文_20240722_草案utf-8.htm");
+
+        byte[] pdfbytes = await ConvertHtmlToPdfService.HtmlToPdf(htmlContent);
+
+        return File(pdfbytes, "application/pdf", "使用wkhtmltopdf轉換成pdf");
+    }
 }

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{5CE51363-DFA0-4386-9491-BDFE732482E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemporaryStorage", "TemporaryStorage\TemporaryStorage.csproj", "{DD827DE5-376A-4C27-A141-B08121702F56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5CE51363-DFA0-4386-9491-BDFE732482E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CE51363-DFA0-4386-9491-BDFE732482E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CE51363-DFA0-4386-9491-BDFE732482E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD827DE5-376A-4C27-A141-B08121702F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD827DE5-376A-4C27-A141-B08121702F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD827DE5-376A-4C27-A141-B08121702F56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD827DE5-376A-4C27-A141-B08121702F56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
