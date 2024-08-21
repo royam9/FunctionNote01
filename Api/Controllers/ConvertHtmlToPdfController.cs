@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Interfaces;
 using System.Text;
 
 namespace Api.Controllers;
@@ -8,6 +9,16 @@ namespace Api.Controllers;
 [ApiController]
 public class ConvertHtmlToPdfController : Controller
 {
+    /// <summary>
+    /// HTML 轉換成 PDF 功能
+    /// </summary>
+    private readonly IConvertHtmlToPdfService _convertHtmlToPdfService;
+
+    public ConvertHtmlToPdfController(IConvertHtmlToPdfService convertHtmlToPdfService)
+    {
+        _convertHtmlToPdfService = convertHtmlToPdfService;
+    }
+
     /// <summary>
     /// Html 轉換成 Pdf
     /// </summary>
@@ -32,7 +43,7 @@ public class ConvertHtmlToPdfController : Controller
         // 如果replace一直失敗
         //string decodedHtml = System.Net.WebUtility.HtmlDecode(utf8Content);
 
-        byte[] pdfbytes = ConvertHtmlToPdfService.ConvertUTF8HtmlToPdf(htmlContent);
+        byte[] pdfbytes = _convertHtmlToPdfService.ConvertUTF8HtmlToPdf(htmlContent);
 
         return File(pdfbytes, "application/pdf", "使用wkhtmltopdf轉換成pdf");
     }
@@ -54,7 +65,7 @@ public class ConvertHtmlToPdfController : Controller
             .ReadAllText(@"D:\hi\CodePractice\FunctionNote01\Api\Resource\Template\個資使用同意書_中英文_20240722_草案.html", 
             Encoding.GetEncoding("big5"));
 
-        byte[] pdfbytes = ConvertHtmlToPdfService.ConvertBig5HtmlToPdf(htmlContent);
+        byte[] pdfbytes = _convertHtmlToPdfService.ConvertBig5HtmlToPdf(htmlContent);
 
         return File(pdfbytes, "application/pdf", "使用wkhtmltopdf轉換成pdf");
     }
@@ -71,7 +82,7 @@ public class ConvertHtmlToPdfController : Controller
         // 先假設有 htmlstring
         htmlContent = System.IO.File.ReadAllText(@"C:\Users\TWJOIN\Desktop\Komo\個資使用同意書_中英文_20240722_草案utf-8.htm");
 
-        byte[] pdfbytes = await ConvertHtmlToPdfService.HtmlToPdf(htmlContent);
+        byte[] pdfbytes = await _convertHtmlToPdfService.HtmlToPdf(htmlContent);
 
         return File(pdfbytes, "application/pdf", "使用wkhtmltopdf轉換成pdf");
     }

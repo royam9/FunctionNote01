@@ -1,12 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Services.Interfaces;
 
-namespace Services.Interfaces
+public interface IConvertHtmlToPdfService
 {
-    internal interface IConvertHtmlToPdfService
-    {
-    }
+    /// <summary>
+    /// Html 轉換成 Pdf
+    /// </summary>
+    /// <param name="htmlContent">Html文字(UTF-8)</param>
+    /// <return></return>
+    byte[] ConvertUTF8HtmlToPdf(string htmlContent);
+
+
+    /// <summary>
+    /// Big5 Html 轉換成 Pdf
+    /// </summary>
+    /// <param name="htmlContent">Html文字(Big5)</param>
+    /// <return></return>
+    byte[] ConvertBig5HtmlToPdf(string htmlContent);
+
+    /// <summary>
+    /// 非同步 Html 轉換成 Pdf
+    /// </summary>
+    /// <param name="htmlContent">Html文字(UTF-8)</param>
+    /// <return></return>
+    Task<byte[]> HtmlToPdf(string htmlContent);
+
+    /// <summary>
+    /// 替換Word另存新檔成html 裡面的參數
+    /// </summary>
+    /// <param name="htmlContent">參數</param>
+    /// <remarks>參數樣式 {參數名稱}</remarks>
+    /// <returns></returns>
+    string ReplaceString(string htmlContent);
 }

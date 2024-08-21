@@ -29,6 +29,18 @@
     <None Update="Resource\wkhtmltox\bin\wkhtmltox.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resource\wkhtmltox\include\wkhtmltox\dllbegin.inc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resource\wkhtmltox\include\wkhtmltox\dllend.inc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resource\wkhtmltox\include\wkhtmltox\image.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resource\wkhtmltox\include\wkhtmltox\pdf.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

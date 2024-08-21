@@ -4,10 +4,11 @@ using System.Text;
 using System.Collections;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
+using Services.Interfaces;
 
 namespace Services;
 
-public class ConvertHtmlToPdfService
+public class ConvertHtmlToPdfService : IConvertHtmlToPdfService
 {
     /// <summary>
     /// 是否為 Linux環境
@@ -24,7 +25,7 @@ public class ConvertHtmlToPdfService
     /// </summary>
     /// <param name="htmlContent">Html文字(UTF-8)</param>
     /// <return></return>
-    public static byte[] ConvertUTF8HtmlToPdf(string htmlContent)
+    public byte[] ConvertUTF8HtmlToPdf(string htmlContent)
     {
         
         string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe"));
@@ -83,7 +84,7 @@ public class ConvertHtmlToPdfService
     /// </summary>
     /// <param name="htmlContent">Html文字(Big5)</param>
     /// <return></return>
-    public static byte[] ConvertBig5HtmlToPdf(string htmlContent)
+    public byte[] ConvertBig5HtmlToPdf(string htmlContent)
     {
         string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe"));
 
@@ -142,7 +143,7 @@ public class ConvertHtmlToPdfService
     /// </summary>
     /// <param name="htmlContent">Html文字(UTF-8)</param>
     /// <return></return>
-    public static async Task<byte[]> HtmlToPdf(string htmlContent)
+    public async Task<byte[]> HtmlToPdf(string htmlContent)
     {
         // ..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe
         // 正式專案 ..\..\..\Resources\PdfPackage\wkhtmltox\bin\wkhtmltopdf.exe
@@ -212,7 +213,7 @@ public class ConvertHtmlToPdfService
     /// <param name="htmlContent">參數</param>
     /// <remarks>參數樣式 {參數名稱}</remarks>
     /// <returns></returns>
-    public static string ReplaceString(string htmlContent)
+    public string ReplaceString(string htmlContent)
     {
         string pattern = @"\{[^{}]*>教室名稱<[^{}]*\}";
 

@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Models.ApiModels;
+using Services.Interfaces;
 using SixLabors.ImageSharp;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -9,7 +10,7 @@ namespace Services;
 /// <summary>
 /// Word文檔
 /// </summary>
-public class WordDocumentService 
+public class ReplaceHtmlTextService : IReplaceHtmlTextService
 {
     /// <summary>
     /// 編輯HTML文件
