@@ -1,9 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text;
-using System.Collections;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
 using Services.Interfaces;
 
 namespace Services;
@@ -13,7 +10,7 @@ public class ConvertHtmlToPdfService : IConvertHtmlToPdfService
     /// <summary>
     /// 是否為 Linux環境
     /// </summary>
-    private bool _isLinux;
+    private readonly bool _isLinux;
 
     public ConvertHtmlToPdfService()
     {
@@ -27,7 +24,7 @@ public class ConvertHtmlToPdfService : IConvertHtmlToPdfService
     /// <return></return>
     public byte[] ConvertUTF8HtmlToPdf(string htmlContent)
     {
-        
+
         string wkhtmltopdfPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Services\Resource\wkhtmltox\bin\wkhtmltopdf.exe"));
 
         // 確認 wkhtmltopdf.exe 是否存在
@@ -154,7 +151,13 @@ public class ConvertHtmlToPdfService : IConvertHtmlToPdfService
         }
         else
         {
-            wkhtmltopdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/PdfPackage/wkhtmltox/bin/wkhtmltopdf.exe");
+            // 公司專案位置
+            // wkhtmltopdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/PdfPackage/wkhtmltox/bin/wkhtmltopdf.exe");
+
+            // 目前專案位置
+            wkhtmltopdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../Services/Resources/PdfPackage/wkhtmltox/bin/wkhtmltopdf.exe");
+            // 改採
+            wkhtmltopdfPath = Path.Combine(Directory.GetCurrentDirectory(), "../Services/Resources/PdfPackage/wkhtmltox/bin/wkhtmltopdf.exe");
         }
 
         // 確認 wkhtmltopdf.exe 是否存在

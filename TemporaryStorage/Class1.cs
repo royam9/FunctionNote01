@@ -59,4 +59,25 @@ public class Class1
         return pdfBytes; // 返回生成的 PDF 數據
     }
 
+    // Louis 之前提供的轉換程式碼
+    /// <summary>
+    /// Html 轉換成 PDF
+    /// </summary>
+    /// <returns></returns>
+    public void ConvertHtmlToPdf(string htmlFilePath, string pdfOutputPath)
+    {
+        //var wkHtmlToPdfPath = Path.Combine(_hostingEnvironment.ContentRootPath, _wkHtmlToPdf);
+
+        //string arguments = $"--encoding utf-8 --page-size A3 --margin-top 0 --margin-bottom 0 --margin-left 0 --margin-right 0 --disable-smart-shrinking --orientation Landscape \"{htmlFilePath}\" \"{pdfOutputPath}\"";
+
+        //using var process = new Process();
+        //process.StartInfo.FileName = wkHtmlToPdfPath;
+        //process.StartInfo.Arguments = arguments;
+        //process.StartInfo.UseShellExecute = false;
+        //process.StartInfo.RedirectStandardOutput = true;
+        //process.StartInfo.RedirectStandardError = true;
+        //process.Start();
+        //process.WaitForExit();
+    }
+
 }

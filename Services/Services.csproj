@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.63" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
   </ItemGroup>
 
@@ -17,28 +18,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resource\wkhtmltox\bin\libwkhtmltox.a">
+    <None Update="Resource\PdfPackage\wkhtmltox\bin\libwkhtmltox.a">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\bin\wkhtmltoimage.exe">
+    <None Update="Resource\PdfPackage\wkhtmltox\bin\wkhtmltoimage.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\bin\wkhtmltopdf.exe">
+    <None Update="Resource\PdfPackage\wkhtmltox\bin\wkhtmltopdf.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\bin\wkhtmltox.dll">
+    <None Update="Resource\PdfPackage\wkhtmltox\bin\wkhtmltox.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\include\wkhtmltox\dllbegin.inc">
+    <None Update="Resource\PdfPackage\wkhtmltox\include\wkhtmltox\dllbegin.inc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\include\wkhtmltox\dllend.inc">
+    <None Update="Resource\PdfPackage\wkhtmltox\include\wkhtmltox\dllend.inc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\include\wkhtmltox\image.h">
+    <None Update="Resource\PdfPackage\wkhtmltox\include\wkhtmltox\image.h">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resource\wkhtmltox\include\wkhtmltox\pdf.h">
+    <None Update="Resource\PdfPackage\wkhtmltox\include\wkhtmltox\pdf.h">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

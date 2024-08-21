@@ -7,10 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+# region Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+# endregion
 
+# region Unit of Service
 builder.Services.AddScoped<IConvertHtmlToPdfService, ConvertHtmlToPdfService>();
+builder.Services.AddScoped<IReplaceHtmlTextService, ReplaceHtmlTextService>();
+# endregion
 
 var app = builder.Build();
 
