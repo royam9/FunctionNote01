@@ -86,4 +86,28 @@ public class ConvertHtmlToPdfController : Controller
 
         return File(pdfbytes, "application/pdf", "使用wkhtmltopdf轉換成pdf");
     }
+
+    [HttpPost]
+    [Route("iTextSharp")]
+    public IActionResult iTextSharp()
+    {
+        // 先假設有 htmlstring
+        string htmlContent = System.IO.File.ReadAllText(@"C:\Users\TWJOIN\Desktop\Komo\個資使用同意書_中英文_20240722_草案utf-8.htm");
+
+        ConvertHtmlToPdfService.TextSharpToPDF(htmlContent);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("iTextSharp_Document")]
+    public IActionResult ITextSharp_Document()
+    {
+        // 先假設有 htmlstring
+        string htmlContent = System.IO.File.ReadAllText(@"C:\Users\TWJOIN\Desktop\Komo\個資使用同意書_中英文_20240722_草案utf-8.htm");
+
+        byte[] result =  ConvertHtmlToPdfService.ITextSharp_Document(htmlContent).ToArray();
+
+        return File(result, "application/pdf", "iTextSharp_Document.pdf");
+    }
 }
