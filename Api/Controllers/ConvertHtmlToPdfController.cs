@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.TestServices;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Interfaces;
 using System.Text;
@@ -109,5 +110,19 @@ public class ConvertHtmlToPdfController : Controller
         byte[] result =  ConvertHtmlToPdfService.ITextSharp_Document(htmlContent).ToArray();
 
         return File(result, "application/pdf", "iTextSharp_Document.pdf");
+    }
+
+    [HttpPost]
+    [Route("CrazyIdea")]
+    public IActionResult CrazyIdea() 
+    {
+        var converter = new DocumentProcessor();
+
+        string inputWordPath = @"C:\Users\TWJOIN\Desktop\Komo\註冊入學範本.docx";
+        string outputWordPath = @"C:\Users\TWJOIN\Desktop\Komo\轉換測試檔案\CrazyIdea.pdf";
+
+        converter.ProcessDocument(inputWordPath, outputWordPath);
+
+        return Ok();
     }
 }
