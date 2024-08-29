@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 # region Unit of Service
 builder.Services.AddScoped<IConvertHtmlToPdfService, ConvertHtmlToPdfService>();
 builder.Services.AddScoped<IReplaceHtmlTextService, ReplaceHtmlTextService>();
+builder.Services.AddScoped<IReplaceWordTextService, ReplaceWordTextService>();
 # endregion
 
 var app = builder.Build();

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Models.ApiModels;
 using Services.Interfaces;
 using SixLabors.ImageSharp;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Services;
 
