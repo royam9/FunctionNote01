@@ -80,5 +80,57 @@ public class Class1
         //process.WaitForExit();
     }
 
+    #region 想使用LibreOffice加密失敗
+    /// <summary>
+    /// 生成帶有密碼的pdf
+    /// </summary>
+    /// <param name="pdfBytes">最初沒有密碼的pdf數據</param>
+    /// <returns></returns>
+    //public async Task<byte[]> GeneratePdfWithPassword(byte[] pdfBytes, string password)
+    //{
+    //    var tempInputFile = Path.GetTempFileName();
+    //    var tempOutputFile = Path.ChangeExtension(tempInputFile, ".pdf");
 
+    //    try
+    //    {
+    //        await File.WriteAllBytesAsync(tempInputFile, pdfBytes);
+
+    //        var startInfo = new ProcessStartInfo
+    //        {
+    //            FileName = _libreOfficePath,
+    //            Arguments = $"--headless --convert-to pdf:writer_pdf_Export:{{\"EncryptFile\":{{\"type\":\"boolean\",\"value\":\"true\"}},\"DocumentOpenPassword\":{{\"type\":\"string\",\"value\":\"{password}\"}} {tempInputFile} --outdir \"{Path.GetDirectoryName(tempOutputFile)}\"",
+    //            //Arguments = $@"--convert-to 'pdf:draw_pdf_Export:{{""EncryptFile"":{{""type"":""boolean"",""value"":""true""}},""DocumentOpenPassword"":{{""type"":""string"",""value"":""secret""}}}}' {tempInputFile}",
+    //            UseShellExecute = false,
+    //            RedirectStandardError = true,
+    //            CreateNoWindow = true
+    //        };
+
+    //        using var process = new Process { StartInfo = startInfo };
+    //        process.Start();
+
+    //        var errorTask = process.StandardError.ReadToEndAsync();
+    //        await process.WaitForExitAsync();
+
+    //        if (process.ExitCode != 0)
+    //        {
+    //            var error = await errorTask;
+    //            throw new Exception($"LibreOffice 轉換失敗。錯誤碼：{process.ExitCode}。錯誤信息：{error}");
+    //        }
+
+    //        if (File.Exists(tempOutputFile))
+    //        {
+    //            return await File.ReadAllBytesAsync(tempOutputFile);
+    //        }
+    //        else
+    //        {
+    //            throw new Exception("無法找到生成的 PDF 文件。");
+    //        }
+    //    }
+    //    finally
+    //    {
+    //        if (File.Exists(tempInputFile)) File.Delete(tempInputFile);
+    //        if (File.Exists(tempOutputFile)) File.Delete(tempOutputFile);
+    //    }
+    //}
+    #endregion
 }
