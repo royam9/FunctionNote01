@@ -240,4 +240,171 @@ public class ReplaceWordTextService : IReplaceWordTextService
         //bookmarkStart.Parent.AppendChild(new Run(element));
     }
 
+    /// <summary>
+    /// Word檔文字插補
+    /// </summary>
+    /// <param name="wordFilePath">Word檔路徑</param>
+    /// <remarks>找尋Paragraph裡面的RunProperties</remarks>
+    /// <remark>結論 只是字型的話可以 但是其他的不會包含進去</remark>
+    /// <returns></returns>
+    public async Task<byte[]> UpdateWordDocument_SearchParagraphProperties(string wordFilePath)
+    {
+        byte[] templateDocumentBytes = await File.ReadAllBytesAsync(wordFilePath);
+
+        // 將資料寫入內存流
+        using (MemoryStream templateStream = new(templateDocumentBytes))
+        {
+            // 打開這個資料
+            using(WordprocessingDocument wordDoc = WordprocessingDocument.Open(templateStream, true))
+            {
+                var body = wordDoc.MainDocumentPart!.Document.Body;
+
+                //讀取書籤
+                IDictionary<String, BookmarkStart> bookmarkMap = new Dictionary<String, BookmarkStart>();
+
+                foreach (BookmarkStart bookmarkStart in wordDoc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+                {
+                    bookmarkMap[bookmarkStart.Name] = bookmarkStart;
+                }
+
+                //根據書籤塞入資料
+                foreach (BookmarkStart bookmarkStart in bookmarkMap.Values)
+                {
+                    // 找尋該Paragraph的下一個Run取得字型樣式
+                    // 初始化變數來存儲找到的 Run 元素
+                    Run nextRun = null;
+
+                    // 使用迴圈遍歷 bookmarkStart 的後續兄弟節點
+                    OpenXmlElement currentElement = bookmarkStart.NextSibling();
+
+                    while (currentElement != null)
+                    {
+                        // 檢查當前元素是否為 Run
+                        if (currentElement is Run)
+                        {
+                            nextRun = (Run)currentElement;
+                            break;
+                        }
+
+                        // 繼續檢查下一個兄弟節點
+                        currentElement = currentElement.NextSibling();
+                    }
+
+                    // 預設字型樣式(size:12 字體:讀取Paragraph設定)
+                    var nextRunProperties = new RunProperties(new FontSize { Val = "24" });
+
+                    // 取得該Paragraph的RunFonts
+                    var ParentParagraph = bookmarkStart.Parent as Paragraph;
+                    var isRunFontExist = ParentParagraph.ParagraphProperties.ParagraphMarkRunProperties.GetFirstChild<RunFonts>() != null;
+
+                    if (isRunFontExist)
+                    {
+                        var theRunFonts = ParentParagraph.ParagraphProperties.ParagraphMarkRunProperties.GetFirstChild<RunFonts>().CloneNode(true);
+                        nextRunProperties.AppendChild(theRunFonts);
+                    }
+
+                    // 如果Paragraph內找到下一個Run，使用下一個Run的字型設定
+                    if (nextRun != null)
+                    {
+                        nextRunProperties = (RunProperties)nextRun.RunProperties.CloneNode(true);
+                    }
+
+                    #region 替換內容
+                    if (bookmarkStart.Name == "CurrentGrade")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "EnrolledTime")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "GenderType")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RegisterDate")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeBirthdate")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeContactAddress")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeDistrictCode")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeEmail")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeMobilePhone")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeName")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeRelationshipType")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "RepresentativeTelephone")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "StudentBirthDate")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    for (var i = 1; i < 5; i++)
+                    {
+                        if (bookmarkStart.Name == $"StudentClassName{i}")
+                        {
+                            bookmarkStart.Parent.InsertAfter((new Run(nextRunProperties, new Text("呀"))), bookmarkStart);
+                        }
+                    }
+
+                    for (var i = 1; i < 5; i++)
+                    {
+                        if (bookmarkStart.Name == $"StudentName{i}")
+                        {
+                            bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                        }
+                    }
+
+                    if (bookmarkStart.Name == "StudentSchoolName")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text("呀")), bookmarkStart);
+                    }
+
+                    if (bookmarkStart.Name == "TodayDate")
+                    {
+                        bookmarkStart.Parent.InsertAfter(new Run(nextRunProperties, new Text(DateTime.Now.ToString("yyyy-MM-dd"))), bookmarkStart);
+                    }
+                    #endregion
+                }
+                wordDoc.MainDocumentPart.Document.Save();
+            }
+            return templateStream.ToArray();
+        }
+    }
 }
