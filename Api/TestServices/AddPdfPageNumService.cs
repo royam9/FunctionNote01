@@ -6,6 +6,11 @@ namespace Api.TestServices;
 
 public class AddPdfPageNumService
 {
+    /// <summary>
+    /// 使用PdfSharp為PDF新增頁碼 在Docker失效
+    /// </summary>
+    /// <param name="pdfBytes"></param>
+    /// <returns></returns>
     public static byte[] AddPageNumbers(byte[] pdfBytes)
     {
         using (MemoryStream inputStream = new MemoryStream(pdfBytes))

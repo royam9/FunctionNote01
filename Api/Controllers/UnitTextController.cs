@@ -143,4 +143,42 @@ public class UnitTextController : Controller
         }
         return Ok();
     }
+
+    /// <summary>
+    /// 使用iTextSharp加入頁碼_使用MemorySteam
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("AddPdfPageNum_iTextSharp_SlackFlow_MemorySteam")]
+    public async Task<IActionResult> AddPdfPageNum_iTextSharp_SlackFlow_MemorySteam()
+    {
+        var pdfBytes = await System.IO.File.ReadAllBytesAsync(@"C:\Users\TWJOIN\Desktop\Komo\頁碼加入範本.pdf");
+
+        using(MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
+        using (MemoryStream outputPdfStream = new MemoryStream())
+        {
+            PdfReader reader = new PdfReader(inputPdfStream);
+            Document document = new Document(reader.GetPageSize(1));
+            PdfWriter writer = PdfWriter.GetInstance(document, outputPdfStream);
+
+            writer.PageEvent = new ITextSharpAddPdfPageNumberService();
+
+            document.Open();
+
+            for (int i = 1; i <= reader.NumberOfPages; i++)
+            {
+                document.NewPage();
+                PdfImportedPage page = writer.GetImportedPage(reader, i);
+                PdfContentByte cb = writer.DirectContent;
+                cb.AddTemplate(page, 0, 0);
+            }
+
+            document.Close();
+            writer.Close();
+            reader.Close();
+
+            await System.IO.File.WriteAllBytesAsync(@"C:\Users\TWJOIN\Desktop\Komo\轉換測試檔案\頁碼測試.pdf", outputPdfStream.ToArray());
+        }
+        return Ok();
+    }
 }
