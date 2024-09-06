@@ -10,11 +10,11 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Models.ApiModels;
 using Microsoft.AspNetCore.Http;
-using A = DocumentFormat.OpenXml.Drawing;
-using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
+using A = DocumentFormat.OpenXml.Drawing;
+using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
+using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 
 namespace Services;
 
@@ -123,16 +123,16 @@ public class ReplaceWordTextService : IReplaceWordTextService
                             ),
                             new A.Graphic(
                                 new A.GraphicData(
-                                    new Pic.Picture(
-                                        new Pic.NonVisualPictureProperties(
-                                            new Pic.NonVisualDrawingProperties() { Id = (UInt32Value)0U, Name = imageFile.FileName },
-                                            new Pic.NonVisualPictureDrawingProperties()
+                                    new PIC.Picture(
+                                        new PIC.NonVisualPictureProperties(
+                                            new PIC.NonVisualDrawingProperties() { Id = (UInt32Value)0U, Name = imageFile.FileName },
+                                            new PIC.NonVisualPictureDrawingProperties()
                                         ),
-                                        new Pic.BlipFill(
+                                        new PIC.BlipFill(
                                             new A.Blip() { Embed = imageId },
                                             new A.Stretch(new A.FillRectangle())
                                         ),
-                                        new Pic.ShapeProperties(
+                                        new PIC.ShapeProperties(
                                             new A.Transform2D(
                                                 new A.Offset() { X = 0L, Y = 0L },
                                                 new A.Extents() { Cx = widthEmus, Cy = heightEmus }
@@ -405,6 +405,103 @@ public class ReplaceWordTextService : IReplaceWordTextService
                 wordDoc.MainDocumentPart.Document.Save();
             }
             return templateStream.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// 插入圖片到指定位置
+    /// </summary>
+    /// <param name="wordDoc">主文件</param>
+    /// <param name="placeholder">佔位符文字</param>
+    /// <param name="imageFile">圖片檔案</param>
+    /// <returns></returns>
+    private void InsertImage(WordprocessingDocument wordDoc, BookmarkStart bookmarkStart, IFormFile imageFile)
+    {
+        var imageType = imageFile.ContentType;
+        var imagePart = wordDoc.MainDocumentPart!.AddNewPart<ImagePart>(imageType);
+
+        // 獲取圖片流
+        using (var stream = imageFile.OpenReadStream())
+        {
+            // 將圖片數據寫入 ImagePart
+            imagePart.FeedData(stream);
+
+            long widthEmus;
+            long heightEmus;
+
+            // 將流位置重置到開頭
+            stream.Position = 0;
+
+            // 計算圖片原始尺寸並轉換成EMUs (保持圖片原始尺寸的場合)
+            using (var image = Image.Load<Rgba32>(stream))
+            {
+                // 計算圖片尺寸（以 EMUs 為單位）
+                widthEmus = image.Width * 9525; // 1 px = 9525 EMUs
+                heightEmus = image.Height * 9525;
+            }
+
+            // 獲取圖片 relationshipId
+            string relationshipId = wordDoc.MainDocumentPart.GetIdOfPart(imagePart);
+
+            var element = new Drawing(
+                new DW.Inline(
+                    // 設定尺寸 EMU
+                    new DW.Extent() { Cx = widthEmus, Cy = heightEmus },
+                    // 設定圖片的效果邊界，這些值通常是設置邊緣的距離
+                    new DW.EffectExtent()
+                    {
+                        LeftEdge = 0L,
+                        TopEdge = 0L,
+                        RightEdge = 0L,
+                        BottomEdge = 0L
+                    },
+                    // 設定圖片的屬性ID(唯一) 和名稱
+                    new DW.DocProperties() { Id = (UInt32Value)1U, Name = imageFile.FileName },
+                    // 鎖定圖片框架的屬性 保持圖片比例不變
+                    new DW.NonVisualGraphicFrameDrawingProperties(
+                        new A.GraphicFrameLocks() { NoChangeAspect = true }
+                    ),
+                    new A.Graphic(
+                        new A.GraphicData(
+                            new PIC.Picture(
+                                new PIC.NonVisualPictureProperties(
+                                    new PIC.NonVisualDrawingProperties() { Id = (UInt32Value)0U, Name = imageFile.FileName },
+                                    new PIC.NonVisualPictureDrawingProperties()
+                                ),
+                                new PIC.BlipFill(
+                                    new A.Blip(
+                                        new A.BlipExtensionList(
+                                            new A.BlipExtension()
+                                            {
+                                                Uri = "{28A0092B-C50C-407E-A947-70E740481C1C}" // 擴展標記（此 URI 通常用於識別不同的擴展）
+                                            }
+                                            )
+                                        )
+                                    { Embed = relationshipId, CompressionState = A.BlipCompressionValues.Print },
+                                    new A.Stretch(new A.FillRectangle())
+                                ),
+                                new PIC.ShapeProperties(
+                                    new A.Transform2D(
+                                        new A.Offset() { X = 0L, Y = 0L },
+                                        new A.Extents() { Cx = widthEmus, Cy = heightEmus }
+                                    ),
+                                    new A.PresetGeometry(new A.AdjustValueList()) { Preset = A.ShapeTypeValues.Rectangle }
+                                )
+                            )
+                        )
+                        { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" }
+                    )
+                )
+                {
+                    DistanceFromTop = (UInt32Value)0U, // 圖片與頂端的距離
+                    DistanceFromBottom = (UInt32Value)0U, // 圖片與底部的距離
+                    DistanceFromLeft = (UInt32Value)0U, // 圖片與左邊的距離
+                    DistanceFromRight = (UInt32Value)0U, // 圖片與右邊的距離
+                    EditId = "50D07946" // 圖片的編輯 ID（可以用於跟踪編輯）
+                }
+            );
+
+            bookmarkStart.Parent.InsertAfter(new Run(element), bookmarkStart);
         }
     }
 }
