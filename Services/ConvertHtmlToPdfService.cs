@@ -21,6 +21,7 @@ public class ConvertHtmlToPdfService : IConvertHtmlToPdfService
         _isLinux = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
     }
 
+    #region 使用 wkhtmltopdf
     /// <summary>
     /// Html 轉換成 Pdf
     /// </summary>
@@ -212,7 +213,7 @@ public class ConvertHtmlToPdfService : IConvertHtmlToPdfService
 
         return pdfBytes; // 返回生成的 PDF 數據
     }
-
+    #endregion
 
     /// <summary>
     /// 替換Word另存新檔成html 裡面的參數

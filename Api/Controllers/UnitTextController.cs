@@ -1,9 +1,9 @@
 ﻿using Api.TestServices;
-using DocumentFormat.OpenXml.Bibliography;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using PDF_Tests;
+using Services.Interfaces;
 
 namespace Api.Controllers;
 
@@ -11,6 +11,16 @@ namespace Api.Controllers;
 [Route("[controller]")]
 public class UnitTextController : Controller
 {
+    /// <summary>
+    /// Word 轉換 PDF
+    /// </summary>
+    private readonly IConvertWordToPdfService _convertWordToPdfService;
+
+    public UnitTextController(IConvertWordToPdfService convertWordToPdfService)
+    {
+        _convertWordToPdfService = convertWordToPdfService;
+    }
+
     /// <summary>
     /// PDF加入頁碼
     /// </summary>
@@ -180,5 +190,18 @@ public class UnitTextController : Controller
             await System.IO.File.WriteAllBytesAsync(@"C:\Users\TWJOIN\Desktop\Komo\轉換測試檔案\頁碼測試.pdf", outputPdfStream.ToArray());
         }
         return Ok();
+    }
+
+    /// <summary>
+    /// 用LibreOffice轉換Word到PDF
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("ConvertWordToPdf_LibreOffice")]
+    public async Task<IActionResult> ConvertWordToPdf_LibreOffice()
+    {
+        byte[] wordData = await System.IO.File.ReadAllBytesAsync(@"C:\Users\TWJOIN\Desktop\Komo\替換文本\0903\註冊入學_加入書籤_含個資同意書.docx");
+        var result = await _convertWordToPdfService.ConvertWordToPdfAsync(wordData);
+        return File(result, "application/pdf", "WordToPdfSpeedTest_LibreOffice");
     }
 }
