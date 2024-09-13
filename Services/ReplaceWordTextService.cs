@@ -260,7 +260,7 @@ public class ReplaceWordTextService : IReplaceWordTextService
                 var body = wordDoc.MainDocumentPart!.Document.Body;
 
                 //讀取書籤
-                IDictionary<String, BookmarkStart> bookmarkMap = new Dictionary<String, BookmarkStart>();
+                IDictionary<string, BookmarkStart> bookmarkMap = new Dictionary<string, BookmarkStart>();
 
                 foreach (BookmarkStart bookmarkStart in wordDoc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
                 {
