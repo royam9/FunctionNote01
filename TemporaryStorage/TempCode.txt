@@ -1,0 +1,49 @@
+﻿            // 成功將收藏數與Place合併做法1
+            // 查詢CustomerCollections type = Place的內容
+            var placeCustomerCollections = DB.CustomerCollections
+                .Where(cc => cc.EntityType == (int)CustomerCollectionEntityTypeEnum.Place)
+                .GroupBy(cc => cc.EntityId);
+            
+            ListResultResponse<PlaceModel> result = new()
+            {
+                Data = await DB.Places
+                    .Where(p => !p.DeletedAt.HasValue)
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Select(p => new PlaceModel
+                    {
+                        Id = p.Id,
+                        PlaceName = p.PlaceName,
+                        PlaceTel = p.PlaceTel == null ? null : p.PlaceTel.Truncate(10),
+                        PlaceAddress = p.PlaceAddress == null ? null : p.PlaceAddress.Truncate(9),
+                        IsEnable = p.IsEnable,
+                        CollectionCount =  placeCustomerCollections
+                            .Where(pc => pc.Key == p.Id)
+                            .Select(pc => pc.Count())
+                            .FirstOrDefault()
+                    })
+                    .ToListAsync()
+            };
+            // 成功將收藏數與Place合併做法2
+            // 查詢CustomerCollections type = Place的內容
+            var placeCustomerCollections = DB.CustomerCollections
+                .Where(cc => cc.EntityType == (int)CustomerCollectionEntityTypeEnum.Place)
+                .Select(cc => cc.EntityId);
+            
+            ListResultResponse<PlaceModel> result = new()
+            {
+                Data = await DB.Places
+                    .Where(p => !p.DeletedAt.HasValue)
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Select(p => new PlaceModel
+                    {
+                        Id = p.Id,
+                        PlaceName = p.PlaceName,
+                        PlaceTel = p.PlaceTel == null ? null : p.PlaceTel.Truncate(10),
+                        PlaceAddress = p.PlaceAddress == null ? null : p.PlaceAddress.Truncate(9),
+                        IsEnable = p.IsEnable,
+                        CollectionCount =  placeCustomerCollections
+                            .Where(pc => pc == p.Id)
+                            .Count()
+                    })
+                    .ToListAsync()
+            };
